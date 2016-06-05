@@ -9,14 +9,12 @@
 
 # Generowanie danych dotyczacych dni urlopowych
 # startDay - nr dnia, od ktorego zaczynamy planowac urlop
-getActualData <- function(startDay, endDay) {
-  n <- endDay - startDay + 1
-  
-  day.data <- matrix(nrow = n, ncol = 3)
-  for(i in 1:n) {
+getActualData <- function() {
+  day.data <- matrix(nrow = 365, ncol = 3)
+  for(i in 1:365) {
     day.data[i, 1] <- rnorm(n = 1, mean = 400, sd = 40)
     day.data[i, 2] <- rnorm(n = 1, mean = 30, sd = 5)
-    day.data[i, 3] <- startDay + i - 1
+    day.data[i, 3] <- i
   }
   
   return(day.data)
@@ -46,16 +44,20 @@ utils.historyPush<-function(i, newDay, history) {
 utils.getNeighbours <- function(day, len, startDay, endDay) {
   neighbours <- c()
   
-  diff <- abs(day - startDay)
+  diff <- day - startDay
   if(diff > 2) 
     diff <- 2
+  else if(diff < 0)
+    diff <- 0
   for(i in 1:diff) {
     neighbours <- c(neighbours, day - i)
   }
   
-  diff <- abs(day + len - endDay)
+  diff <- endDay - (day + len)
   if(diff > 2) 
     diff <- 2
+  else if(diff < 0)
+    diff <- 0
   for(i in 1:diff) {
     neighbours <- c(neighbours, day + i)
   }
@@ -83,10 +85,9 @@ utils.getAverageWeather <- function(day) {
   return(result / 10.0)
 }
 
-utils.scoreDay <- function(actualData, day, holidayStartDay, len) {
+utils.scoreDay <- function(actualData, day, len) {
   endDay <- day + len
-  diff <- day - holidayStartDay
-  planeTicketPrice <- actualData[diff, 1] + actualData[diff + len, 1]
+  planeTicketPrice <- actualData[day, 1] + actualData[endDay, 1]
   hotelPrice <- 0.0
   weatherScore <- 0.0
   temperatureScore <- 0.0
@@ -105,7 +106,7 @@ utils.scoreDay <- function(actualData, day, holidayStartDay, len) {
 }
 
 utils.termination <- function(i) {
-  if(i > 20)
+  if(i > 70)
     return(TRUE)
   
   return(FALSE)
@@ -118,19 +119,19 @@ utils.getRandomNeighbour <- function(day, len, startDay, endDay) {
 }
 
 alghoritm.findOptimalHolidays <- function(startDay, endDay, len, startTemp) {
-  actualData = getActualData(startDay = startDay, endDay = endDay)
+  actualData = getActualData()
   
   # Algorytm symulowanego wyzarzania
   s0 <- floor(runif(n = 1, min = startDay, max = endDay))
-  sx <- utils.scoreDay(day = s0, actualData = actualData, len = len, holidayStartDay = startDay)
+  sx <- utils.scoreDay(day = s0, actualData = actualData, len = len)
   history <- utils.initHistory(n = 20)
   x <- s0
   best <- x
   T <- startTemp
   i <- 0
   while(!utils.termination(i)) {
-    y <- utils.getRandomNeighbour(day = x, len = len, startDay = startTemp, endDay = endDay)
-    sy <- utils.scoreDay(day = y, actualData = actualData, len = len, holidayStartDay = startDay)
+    y <- utils.getRandomNeighbour(day = x, len = len, startDay = startDay, endDay = endDay)
+    sy <- utils.scoreDay(day = y, actualData = actualData, len = len)
     if(sy > sx) {
       x <- y
       sx <- sy
@@ -144,10 +145,14 @@ alghoritm.findOptimalHolidays <- function(startDay, endDay, len, startTemp) {
       }
     }
     i <- i + 1
-    T <- T - T/100
+    T <- T - T/2
   }
   
   return(best)
 }
 
-alghoritm.findOptimalHolidays(1, 100, 3, 20)
+alghoritm.findOptimalHolidays(1, 100, 30, 0.01)
+alghoritm.findOptimalHolidays(1, 100, 30, 0.01)
+alghoritm.findOptimalHolidays(1, 100, 30, 0.01)
+alghoritm.findOptimalHolidays(1, 100, 30, 0.01)
+alghoritm.findOptimalHolidays(1, 100, 30, 0.01)
