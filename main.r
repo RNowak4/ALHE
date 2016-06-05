@@ -22,7 +22,7 @@ getActualData <- function() {
 
 # Temperatura w ciagu ostatnich 10 lat
 history.temperature <- matrix(data = runif(10, min = 5, max = 40), ncol = 365, nrow = 10)
-
+#history.temperature <- B = matrix(c(40, 40, 40, 40, 40, 40), nrow=1, ncol=60) 
 # Pogoda w ciagu ostatnich 10 lat
 history.weather <- matrix(data = floor(runif(10, min = 0, max = 10)), ncol = 365, nrow = 10)
 
@@ -68,21 +68,21 @@ utils.getNeighbours <- function(day, len, startDay, endDay) {
 utils.getAverageTemperature <- function(day) {
   result <- 0.0
   
-  for(i in 1:10) {
-    result <- result + history.temperature[day, i]
+  for(i in 1:nrow(history.temperature)) {
+    result <- result + history.temperature[i, day]
   }
   
-  return(result / 10.0)
+  return(result / (nrow(history.temperature)*1.0))
 }
 
 utils.getAverageWeather <- function(day) {
   result <- 0.0
   
-  for(i in 1:10) {
-    result <- result + history.weather[day, i]
+  for(i in 1:nrow(history.weather)) {
+    result <- result + history.weather[i, day]
   }
   
-  return(result / 10.0)
+  return(result / (nrow(history.weather)*1.0))
 }
 
 utils.scoreDay <- function(actualData, day, len) {
@@ -95,11 +95,10 @@ utils.scoreDay <- function(actualData, day, len) {
   for(i in day:endDay) {
     hotelPrice <- hotelPrice + actualData[i, 2]
     actualDay <- actualData[i, 3]
-    # TODO ...
-    #weatherScore <- 
+    weatherScore <- utils.getAverageTemperature(i) * utils.getAverageWeather(i)
   }
   
-  score <- 1000000 - (planeTicketPrice + hotelPrice)
+  score <- 1000000 - (planeTicketPrice + hotelPrice) + weatherScore
   score <- 1
   
   return(score)
@@ -156,3 +155,4 @@ alghoritm.findOptimalHolidays(1, 100, 30, 0.01)
 alghoritm.findOptimalHolidays(1, 100, 30, 0.01)
 alghoritm.findOptimalHolidays(1, 100, 30, 0.01)
 alghoritm.findOptimalHolidays(1, 100, 30, 0.01)
+
