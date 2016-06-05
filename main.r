@@ -107,18 +107,19 @@ utils.termination <- function(i) {
 utils.getRandomNeighbour <- function(day, len, startDay, endDay) {
   neighbours <- utils.getNeighbours(day = day, len = len, startDay =  startDay, endDay = endDay)
   
-  return(neighbours[floor(runif(min = 1, max = lenght(neighbours)))])
+  return(neighbours[floor(runif(n = 1, min = 1, max = lenght(neighbours)))])
 }
 
 alghoritm.findOptimalHolidays <- function(startDay, endDay, len, startTemp) {
   actualData = getActualData(startDay = startDay, endDay = endDay)
   
   # Algorytm symulowanego wyzarzania
-  s0 <- startDay + (runif(min = 0, max = len))
+  s0 <- startDay + (runif(n = 1, min = 0, max = len))
   sx <- utils.scoreDay(day = s0, actualData = actualData, len = len)
   history <- utils.initHistory(n = s0, score = sx)
   x <- s0
   T <- startTemp
+  i <- 0
   while(!utils.termination(i)) {
     y <- utils.getRandomNeighbour(day = x, len = len, startDay = startTemp, endDay = endDay)
     sy <- utils.scoreDay(day = y, actualData = actualData, len = len)
@@ -127,13 +128,14 @@ alghoritm.findOptimalHolidays <- function(startDay, endDay, len, startTemp) {
       sx <- sy
     } else {
       pa <- exp(-abs(sy - sx) / T)
-      r <- runif(min = 0, max = 1)
+      r <- runif(n = 1, min = 0, max = 1)
       if(r < pa) {
         x <- y
         sx <- sy
       }
     }
-    # T <- T - ...
+    i <- i + 1
+    T <- T - T/100
   }
   
   return(x)
