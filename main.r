@@ -47,12 +47,16 @@ utils.getNeighbours <- function(day, len, startDay, endDay) {
   neighbours <- c()
   
   diff <- abs(day - startDay)
-  for(i in 1:(diff > 2?2:diff)) {
+  if(diff > 2) 
+    diff <- 2
+  for(i in 1:diff) {
     neighbours <- c(neighbours, day - i)
   }
   
   diff <- abs(day + len - endDay)
-  for(i in 1:(diff > 2?2:diff)) {
+  if(diff > 2) 
+    diff <- 2
+  for(i in 1:diff) {
     neighbours <- c(neighbours, day + i)
   }
   
