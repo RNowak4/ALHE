@@ -125,6 +125,7 @@ alghoritm.findOptimalHolidays <- function(startDay, endDay, len, startTemp) {
   sx <- utils.scoreDay(day = s0, actualData = actualData, len = len, holidayStartDay = startDay)
   history <- utils.initHistory(n = 20)
   x <- s0
+  best <- x
   T <- startTemp
   i <- 0
   while(!utils.termination(i)) {
@@ -133,6 +134,7 @@ alghoritm.findOptimalHolidays <- function(startDay, endDay, len, startTemp) {
     if(sy > sx) {
       x <- y
       sx <- sy
+      best <- x
     } else {
       pa <- exp(-abs(sy - sx) / T)
       r <- runif(n = 1, min = 0, max = 1)
@@ -145,7 +147,7 @@ alghoritm.findOptimalHolidays <- function(startDay, endDay, len, startTemp) {
     T <- T - T/100
   }
   
-  return(x)
+  return(best)
 }
 
 alghoritm.findOptimalHolidays(1, 100, 3, 20)
