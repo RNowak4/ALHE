@@ -28,8 +28,8 @@ history.temperature <- matrix(data = runif(10, min = 5, max = 40), ncol = 365, n
 # Pogoda w ciagu ostatnich 10 lat
 history.weather <- matrix(data = floor(runif(10, min = 0, max = 10)), ncol = 365, nrow = 10)
 
-utils.initHistory<-function(n, score) {
-  history<-data.frame(startDay = numeric(n), score = numeric(score))
+utils.initHistory<-function(n) {
+  history<-data.frame(startDay = numeric(n), score = numeric(n))
   
   return (history)
 }
@@ -59,7 +59,7 @@ utils.getNeighbours <- function(day, len, startDay, endDay) {
   return(neighbours)
 }
 
-utils.getAverageTemperature(day) {
+utils.getAverageTemperature <- function(day) {
   result <- 0.0
   
   for(i in 1:10) {
@@ -69,7 +69,7 @@ utils.getAverageTemperature(day) {
   return(result / 10.0)
 }
 
-utils.getAverageWeather(day) {
+utils.getAverageWeather <- function(day) {
   result <- 0.0
   
   for(i in 1:10) {
@@ -117,7 +117,7 @@ alghoritm.findOptimalHolidays <- function(startDay, endDay, len, startTemp) {
   # Algorytm symulowanego wyzarzania
   s0 <- startDay + (runif(n = 1, min = 0, max = len))
   sx <- utils.scoreDay(day = s0, actualData = actualData, len = len)
-  history <- utils.initHistory(n = s0, score = sx)
+  history <- utils.initHistory(n = 20)
   x <- s0
   T <- startTemp
   i <- 0
@@ -141,3 +141,5 @@ alghoritm.findOptimalHolidays <- function(startDay, endDay, len, startTemp) {
   
   return(x)
 }
+
+alghoritm.findOptimalHolidays(1, 100, 3, 20)
