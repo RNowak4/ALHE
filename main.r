@@ -12,11 +12,12 @@
 getActualData <- function(startDay, endDay) {
   n <- endDay - startDay + 1
   
-  day.data <- data.frame(
-    ticket_price = c(rnorm(n, mean = 400, sd = 40)),
-    hotel_price = c(rnorm(n, mean = 30, sd = 5)),
-    dayNr = seq(startDay, endDay, by = 1)
-  )
+  day.data <- matrix(nrow = n, ncol = 3)
+  for(i in 1:n) {
+    day.data[i, 1] <- rnorm(n = 1, mean = 400, sd = 40)
+    day.data[i, 2] <- rnorm(n = 1, mean = 30, sd = 5)
+    day.data[i, 3] <- startDay + i - 1
+  }
   
   return(day.data)
 }
