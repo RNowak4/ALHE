@@ -21,10 +21,14 @@ getActualData <- function() {
 }
 
 # Temperatura w ciagu ostatnich 10 lat
-history.temperature <- matrix(data = runif(10, min = 5, max = 40), ncol = 365, nrow = 10)
+
+
+#history.temperature <- matrix(data = runif(10, min = 5, max = 40), ncol = 365, nrow = 10)
+history.temperature <- matrix(c(400, 400, 400, 400, 400, 400,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), nrow=1, ncol=60) 
 
 # Pogoda w ciagu ostatnich 10 lat
-history.weather <- matrix(data = floor(runif(10, min = 0, max = 10)), ncol = 365, nrow = 10)
+#history.weather <- matrix(data = floor(runif(10, min = 0, max = 10)), ncol = 365, nrow = 10)
+history.weather <- matrix(c(10, 10, 10, 10, 10, 10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), nrow=1, ncol=60) 
 
 utils.initHistory<-function(n) {
   history<-data.frame(startDay = numeric(n), score = numeric(n))
@@ -67,11 +71,11 @@ utils.getNeighbours <- function(day, len, startDay, endDay) {
 
 utils.getAverageTemperature <- function(day) {
   result <- 0.0
-  
   for(i in 1:nrow(history.temperature)) {
     result <- result + history.temperature[i, day]
   }
-  
+  #print(day)
+  #print((result / (nrow(history.temperature)*1.0)))
   return(result / (nrow(history.temperature)*1.0))
 }
 
@@ -149,8 +153,10 @@ alghoritm.findOptimalHolidays <- function(startDay, endDay, len, startTemp) {
   return(best)
 }
 
-alghoritm.findOptimalHolidays(1, 100, 30, 0.01)
-alghoritm.findOptimalHolidays(1, 100, 30, 0.01)
-alghoritm.findOptimalHolidays(1, 100, 30, 0.01)
-alghoritm.findOptimalHolidays(1, 100, 30, 0.01)
-alghoritm.findOptimalHolidays(1, 100, 30, 0.01)
+
+alghoritm.findOptimalHolidays(1, 50, 3, 0.1)
+alghoritm.findOptimalHolidays(1, 50, 3, 0.1)
+alghoritm.findOptimalHolidays(1, 50, 3, 0.1)
+alghoritm.findOptimalHolidays(1, 50, 3, 0.1)
+alghoritm.findOptimalHolidays(1, 50, 3, 0.1)
+
