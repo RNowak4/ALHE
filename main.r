@@ -121,7 +121,7 @@ alghoritm.findOptimalHolidays <- function(startDay, endDay, len, startTemp) {
   actualData = getActualData(startDay = startDay, endDay = endDay)
   
   # Algorytm symulowanego wyzarzania
-  s0 <- startDay + (runif(n = 1, min = 0, max = len))
+  s0 <- floor(runif(n = 1, min = startDay, max = endDay))
   sx <- utils.scoreDay(day = s0, actualData = actualData, len = len, holidayStartDay = startDay)
   history <- utils.initHistory(n = 20)
   x <- s0
